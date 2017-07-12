@@ -1,1 +1,1 @@
-### React starter kit
+### A very simple react-redux todo app
