@@ -55,27 +55,21 @@ const todoApp = combineReducers({
 });
 
 let nextTodoId = 0;
-const addTodo = (text) => {
-  return {
-    type: "ADD_TODO",
-    id: nextTodoId++,
-    text: text
-  };
-};
+const addTodo = (text) => ({
+  type: "ADD_TODO",
+  id: nextTodoId++,
+  text: text
+});
 
-const toogleTodo = (id) => {
-  return {
-    type: "TOGGLE_TODO",
-    id: id
-  };
-};
+const toogleTodo = (id) => ({
+  type: "TOGGLE_TODO",
+  id: id
+});
 
-const setVisibilityFilter = (filter) => {
-  return {
-    type: "SET_VISIBILITY_FILTER",
-    filter: filter
-  };
-};
+const setVisibilityFilter = (filter) => ({
+  type: "SET_VISIBILITY_FILTER",
+  filter: filter
+});
 
 // Presentational Component
 const Link = ({
@@ -100,18 +94,15 @@ const Link = ({
   );
 };
 
-const mapStateToLinkProps = (state, ownProps) => {
-  return {
-    active: ownProps.filter === state.visibilityFilter
+const mapStateToLinkProps = (state, ownProps) => ({
+  active: ownProps.filter === state.visibilityFilter
+});
+
+const mapDispatchToLinkProps = (dispatch, ownProps) => ({
+  onClick: () => {
+    dispatch(setVisibilityFilter(ownProps.filter));
   }
-};
-const mapDispatchToLinkProps = (dispatch, ownProps) => {
-  return {
-    onClick: () => {
-      dispatch(setVisibilityFilter(ownProps.filter));
-    }
-  }
-};
+});
 const FilterLink = connect(
   mapStateToLinkProps,
   mapDispatchToLinkProps
@@ -192,18 +183,14 @@ const getVisibleTodos = (todos, filter) => {
   }
 };
 
-const mapStateToTodoListProps = (state) => {
-  return {
-    todos: getVisibleTodos(state.todos, state.visibilityFilter)
+const mapStateToTodoListProps = (state) => ({
+  todos: getVisibleTodos(state.todos, state.visibilityFilter)
+});
+const mapDispatchToTodoListProps = (dispatch) => ({
+  onTodoClick: (id) => {
+    dispatch(toogleTodo(id));
   }
-};
-const mapDispatchToTodoListProps = (dispatch) => {
-  return {
-    onTodoClick: (id) => {
-      dispatch(toogleTodo(id));
-    }
-  }
-}
+});
 const VisibleTodoList = connect(
   mapStateToTodoListProps,
   mapDispatchToTodoListProps
@@ -217,7 +204,15 @@ const TodoApp = ({ store }) => (
   </div>
 )
 
-const store = createStore(todoApp);
+const persistedState = {
+  todos: [{
+    id: "0",
+    text: "Welcome back!",
+    completed: false,
+  }]
+};
+
+const store = createStore(todoApp, persistedState);
 
 ReactDOM.render(
   <Provider store={store}>
