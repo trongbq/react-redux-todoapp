@@ -38,3 +38,21 @@ export const fetchTodos = (filter) => (
     }
   })
 );
+
+export const addTodo = (text) =>
+  delay(1000).then(() => {
+    const todo = {
+      id: v4(),
+      text,
+      completed: false,
+    };
+    fakeDatabase.todos.push(todo);
+    return todo;
+  });
+
+export const toogleTodo = (id) =>
+  delay(1000).then(() => {
+    const todo = fakeDatabase.todos.find(t => t.id === id);
+    todo.completed = !todo.completed;
+    return todo;
+  });
