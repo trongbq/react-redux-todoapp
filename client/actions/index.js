@@ -11,10 +11,14 @@ export const addTodo = (text) => (dispatch) =>
     })
   });
 
-export const toogleTodo = (id) => ({
-  type: "TOGGLE_TODO",
-  id: id
-});
+export const toogleTodo = (id) => (dispatch) => {
+  api.toogleTodo(id).then(response => {
+    dispatch({
+      type: "TOOGLE_TODO_SUCCESS",
+      response: normalize(response, schema.todo),
+    })
+  });
+};
 
 export const fetchTodos = (filter) => (dispatch, getState) => {
   if (getIsFetching(getState(), filter)) {
