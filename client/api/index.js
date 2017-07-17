@@ -21,7 +21,7 @@ const delay = (ms) => (
 );
 
 export const fetchTodos = (filter) => (
-  delay(500).then(() => {
+  delay(1000).then(() => {
     switch(filter) {
       case "all":
         return fakeDatabase.todos;

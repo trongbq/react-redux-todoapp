@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import TodoList from "./TodoList";
 import * as actions from "../actions";
-import { getVisibleTodos } from "../reducers"
+import { getVisibleTodos, getIsFetching } from "../reducers"
 
 class VisibleTodoList extends React.Component {
   componentDidMount() {
@@ -22,14 +22,18 @@ class VisibleTodoList extends React.Component {
   }
 
   render() {
-    const { toogleTodo, ...rest } = this.props;
-    return <TodoList {...rest} onTodoClick={toogleTodo}/>;
+    const { toogleTodo, isFetching, todos } = this.props;
+    if (isFetching && !todos.length) {
+      return <p>Loading...</p>;
+    }
+    return <TodoList todos={todos} onTodoClick={toogleTodo}/>;
   }
 }
 const mapStateToTodoListProps = (state, ownProps) => {
   const filter = ownProps.match.params.filter || "all";
   return {
     todos: getVisibleTodos(state, filter),
+    isFetching: getIsFetching(state, filter),
     filter,
   }
 };
